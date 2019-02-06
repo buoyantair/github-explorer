@@ -1,7 +1,6 @@
 <template>
   <button>
-    <slot>
-    </slot>
+    <slot></slot>
   </button>
 </template>
 
@@ -18,7 +17,7 @@ button {
   border-radius: 10px;
   margin: 20px auto;
   border: none;
-  background: #6197FF;
+  background: #6197ff;
   color: #fff;
   font-weight: normal;
   display: flex;

@@ -2,25 +2,51 @@
   <div class="home">
     <h1 class="site-heading">
       GitHub
-      <span>
-        Explorer
-      </span>
+      <span>Explorer</span>
     </h1>
 
     <form>
-      <input type="text" placeholder="Search Github..."/>
-      <Button type="submit">Search</Button>
+      <input v-model="query" type="text" placeholder="Search Github...">
+      <router-link :to="{ path: 'search', query: { query }}">
+        <Button>Search</Button>
+      </router-link>
     </form>
+
+    <!-- <ApolloQuery :query="require('@/graphql/search.gql')" :variables="variables">
+      <template slot-scope="{ result }">
+        <div v-if="result">
+          <div v-if="result.loading">Loading...</div>
+
+          <div v-else-if="result.error">An error occured</div>
+
+          <div v-else-if="result.data">
+            <p v-for="user of result.data.search.nodes" :key="user.id" class="user">{{ user.name }}</p>
+          </div>
+
+          <div v-else>No result :(</div>
+        </div>
+      </template>
+    </ApolloQuery>-->
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
 import Button from '@/components/Button.vue'
+
 export default {
   name: 'home',
   components: {
     Button
+  },
+  data() {
+    return {
+      variables: {
+        query: 'sean',
+        first: 50,
+        type: 'USER'
+      },
+      query: ''
+    }
   }
 }
 </script>
@@ -47,12 +73,12 @@ export default {
 form {
   margin: 20px 0;
   font-weight: normal;
-  input[type="text"] {
+  input[type='text'] {
     height: 30px;
     width: 40%;
     display: block;
     margin: 0 auto;
-    border: 1px solid #C6C6C6;
+    border: 1px solid #c6c6c6;
     border-radius: 10px;
     display: flex;
     flex-flow: column;
@@ -61,7 +87,7 @@ form {
     font-size: 18px;
   }
   input::placeholder {
-    color: #D8D8D8;
+    color: #d8d8d8;
   }
 }
 </style>

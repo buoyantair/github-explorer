@@ -1,0 +1,23 @@
+query Search ($first: Int, $query: String!, $type: SearchType!) { 
+  search(first: $first, query: $query, type: $type) {
+    nodes {
+      ... on Repository {
+        name
+        owner {
+          login
+        }
+      }
+
+      ... on Organization {
+        name
+      }
+
+      ... on User {
+        id
+        name
+      }
+    }
+    repositoryCount
+    userCount
+  }
+}
