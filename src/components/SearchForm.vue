@@ -12,7 +12,13 @@
         v-on:input="$emit('search', {
           ...search,
           query: $event.target.value
-        });"
+        }); $route.path === '/search' && $router.push({
+          name: 'search',
+          query: {
+            ...search,
+            query: $event.target.value
+          }
+        })"
         type="text"
         placeholder="Search Github..."
       >
