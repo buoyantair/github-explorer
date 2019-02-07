@@ -2,83 +2,56 @@
   <div class="search">
     <header>
       <Header size="small"/>
-      <SearchForm v-model="query" type="small"/>
+      <SearchForm v-model="search" type="small"/>
     </header>
-    <section class="search-results">
-      {{ results }}
-      <!-- <ApolloQuery
-        :query="require('../graphql/search.gql')"
-        :variables="{
-        query, first, type
-      }"
-      >
-        <template slot-scope="{ result }">
-          <div v-if="result">
-            <div v-if="result.loading" class="loading apollo">Loading...</div>
-            <div v-else-if="result.error" class="error apollo">An error occured</div>
-            <div v-else-if="result.data" class="result apollo">{{ result.data }}</div>
-            <div v-else class="no-result apollo">No result :(</div>
+
+    <ApolloQuery :query="require('../graphql/search.gql')" :variables="variables">
+      <template slot-scope="{ result }">
+        <div v-if="result">
+          <div v-if="result.loading" class="loading apollo">Loading...</div>
+          <div v-else-if="result.error" class="error apollo">An error occured</div>
+          <div
+            v-else-if="result.data && result.data.search && result.data.search.nodes"
+            class="result apollo"
+          >
+            <section class="search-results">
+              <SearchResult v-for="r in result.data.search.nodes" :key="r.id" :result="r"/>
+            </section>
           </div>
-        </template>
-      </ApolloQuery>-->
-    </section>
+          <div v-else class="no-result apollo">No result :(</div>
+        </div>
+      </template>
+    </ApolloQuery>
   </div>
 </template>
 <script>
 import Header from '@/components/Header.vue'
 import SearchForm from '@/components/SearchForm.vue'
+import SearchResult from '@/components/SearchResult.vue'
 
 export default {
   name: 'search',
   components: {
     Header,
-    SearchForm
-  },
-  apollo: {
-    search: {
-      query: require('../graphql/search.gql'),
-      variables() {
-        return {
-          first: 10,
-          type: 'USER',
-          query: this.$data.query
-        }
-      },
-      fetchPolicy: 'cache-and-network',
-      result({ data, loading }) {
-        if (!loading && data.search && data.search.nodes) {
-          if (!this.$data.usersFetched) {
-            this.$data.results = [...this.$data.results, data.search.nodes]
-            this.$data.usersFetched = true
-            this.$apollo.queries.search.refetch({
-              type: 'REPOSITORY',
-              first: 10,
-              query: this.$data.query
-            })
-          } else if (this.$data.usersFetched) {
-            this.$data.results = [...this.$data.results, data.search.nodes]
-            this.$data.usersFetched = true
-          }
-        }
-      }
-    }
-    // searchRepos: {
-    //   query: require('../graphql/searchRepos.gql'),
-    //   variables() {
-    //     return {
-    //       first: 10,
-    //       type: 'REPOSITORY',
-    //       query: this.$data.query
-    //     }
-    //   },
-    //   fetchPolicy: 'cache-and-network'
-    // }
+    SearchForm,
+    SearchResult
   },
   data() {
     return {
-      query: this.$route.query.query || '',
-      results: [],
-      usersFetched: false
+      search: {
+        query: this.$route.query.query || '',
+        type: this.$route.query.type || 'USER'
+      },
+      results: []
+    }
+  },
+  computed: {
+    variables: function() {
+      return {
+        first: 10,
+        query: this.$data.search.query,
+        type: this.$data.search.type
+      }
     }
   }
 }
@@ -87,7 +60,7 @@ export default {
 <style lang="scss" scoped>
 .search {
   background: #eeeeee;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
 }
 header {
@@ -115,9 +88,12 @@ header {
 }
 
 .search-results {
+  width: 80%;
+  padding: 50px 0;
   margin: 0 auto;
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-start;
+  display: grid;
+  grid-auto-rows: 150px;
+  height: 100%;
+  grid-gap: 15px;
 }
 </style>

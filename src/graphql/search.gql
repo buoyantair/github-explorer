@@ -2,6 +2,7 @@ query searchUsers ($first: Int, $query: String!, $type: SearchType!) {
   search(first: $first, query: $query, type: $type) {
     nodes {
       ... on Repository {
+        id
         name
         owner {
           login
@@ -14,6 +15,7 @@ query searchUsers ($first: Int, $query: String!, $type: SearchType!) {
       ... on User {
         id
         name
+        bio
       }
     }
     userCount

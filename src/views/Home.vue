@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header size="big"/>
-    <SearchForm type="big" v-model="query"/>
+    <SearchForm type="big" v-model="search"/>
   </div>
 </template>
 <script>
@@ -18,7 +18,10 @@ export default {
   },
   data() {
     return {
-      query: ''
+      search: {
+        query: '',
+        type: 'USER'
+      }
     }
   }
 }

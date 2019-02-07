@@ -2,7 +2,7 @@
   <router-link to="/">
     <h1
       class="site-heading"
-      v-bind:class="{
+      :class="{
       'site-heading--big': size === 'big',
       'site-heading--small': size === 'small',
     }"
