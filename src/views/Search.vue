@@ -30,7 +30,7 @@ import SearchForm from '@/components/SearchForm.vue'
 import SearchResult from '@/components/SearchResult.vue'
 
 export default {
-  name: 'search',
+  name: 'Search',
   components: {
     Header,
     SearchForm,

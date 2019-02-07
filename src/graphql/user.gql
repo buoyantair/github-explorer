@@ -1,0 +1,15 @@
+query user($login:String!, $first:Int) {
+	user(login:$login){
+    name
+    repositories (first:$first){
+      nodes{
+        name
+        description
+        owner {
+          login
+        }
+      }
+    }
+    bio
+  }
+}
