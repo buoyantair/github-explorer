@@ -23,6 +23,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: () => import(/* webpackChunkName: "search" */ './views/Search.vue')
+    },
+    {
+      path: '/:id',
+      name: 'user',
+      component: () => import(/* webpackChunkName: "user" */ './views/User.vue')
     }
   ]
 })

@@ -11,12 +11,14 @@ query searchUsers ($first: Int, $query: String!, $type: SearchType!) {
       }
       ... on Organization {
         name
+        login
       }
 
       ... on User {
         id
         name
         bio
+        login
       }
     }
     userCount

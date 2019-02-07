@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/">
+  <router-link :to="link">
     <div
       v-if="result.__typename === 'User' || result.__typename === 'Organization'"
       class="search-result"
@@ -10,7 +10,7 @@
     >
       <div class="avatar"/>
       <div class="user-detail">
-        <h1>{{ name }}</h1>
+        <h1>{{ result.name || result.login }}</h1>
         <p>{{ result.bio }}</p>
       </div>
     </div>
@@ -29,8 +29,17 @@ export default {
     }
   },
   computed: {
-    name: function() {
-      return this.result.name
+    link: function() {
+      if (
+        this.result.__typename === 'User' ||
+        this.result.__typename === 'Organization'
+      ) {
+        return `/${this.result.login}`
+      } else if (this.result.__typename === 'Repository') {
+        return `/${this.result.owner.login}/${this.result.name}`
+      } else {
+        return '/'
+      }
     }
   }
 }
