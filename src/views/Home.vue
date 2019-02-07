@@ -1,16 +1,8 @@
 <template>
   <div class="home">
-    <h1 class="site-heading">
-      GitHub
-      <span>Explorer</span>
-    </h1>
+    <Header size="big"/>
 
-    <form>
-      <input v-model="query" type="text" placeholder="Search Github...">
-      <router-link :to="{ path: 'search', query: { query }}">
-        <Button>Search</Button>
-      </router-link>
-    </form>
+    <SearchForm type="big"/>
 
     <!-- <ApolloQuery :query="require('@/graphql/search.gql')" :variables="variables">
       <template slot-scope="{ result }">
@@ -32,11 +24,15 @@
 <script>
 // @ is an alias to /src
 import Button from '@/components/Button.vue'
+import Header from '@/components/Header.vue'
+import SearchForm from '@/components/SearchForm.vue'
 
 export default {
   name: 'home',
   components: {
-    Button
+    Button,
+    Header,
+    SearchForm
   },
   data() {
     return {
@@ -57,37 +53,5 @@ export default {
   display: flex;
   flex-flow: column;
   justify-content: center;
-}
-.site-heading {
-  margin: 0 auto;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 72px;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  span {
-    font-size: 64px;
-    font-weight: 600;
-  }
-}
-
-form {
-  margin: 20px 0;
-  font-weight: normal;
-  input[type='text'] {
-    height: 30px;
-    width: 40%;
-    display: block;
-    margin: 0 auto;
-    border: 1px solid #c6c6c6;
-    border-radius: 10px;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    padding: 10px;
-    font-size: 18px;
-  }
-  input::placeholder {
-    color: #d8d8d8;
-  }
 }
 </style>
