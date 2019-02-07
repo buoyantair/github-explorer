@@ -1,13 +1,19 @@
-query user($login:String!, $first:Int) {
+query user($login:String!, $first:Int, $after: String) {
 	user(login:$login){
     name
-    repositories (first:$first){
+    repositories (first:$first, after:$after){
       nodes{
         name
         description
         owner {
           login
         }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
       }
     }
     bio
