@@ -1,8 +1,7 @@
 <template>
   <div class="home">
     <Header size="big"/>
-
-    <SearchForm type="big"/>
+    <SearchForm type="big" v-model="query"/>
   </div>
 </template>
 <script>
@@ -14,17 +13,11 @@ import SearchForm from '@/components/SearchForm.vue'
 export default {
   name: 'home',
   components: {
-    Button,
     Header,
     SearchForm
   },
   data() {
     return {
-      variables: {
-        query: 'sean',
-        first: 50,
-        type: 'USER'
-      },
       query: ''
     }
   }

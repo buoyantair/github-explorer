@@ -6,7 +6,12 @@
       'search-form--small': type === 'small',
     }"
   >
-    <input v-model="query" type="text" placeholder="Search Github...">
+    <input
+      :value="query"
+      v-on:change="$emit('search', $event.target.value)"
+      type="text"
+      placeholder="Search Github..."
+    >
     <router-link :to="{ path: 'search', query: { query }}">
       <Button>Search</Button>
     </router-link>
@@ -20,13 +25,13 @@ export default {
   components: {
     Button
   },
-  props: {
-    type: String
+  model: {
+    prop: 'query',
+    event: 'search'
   },
-  data() {
-    return {
-      query: this.$route.query.query || ''
-    }
+  props: {
+    type: String,
+    query: String
   }
 }
 </script>
