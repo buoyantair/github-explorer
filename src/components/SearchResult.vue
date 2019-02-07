@@ -1,9 +1,9 @@
 <template>
   <router-link to="/">
     <div
+      v-if="result.__typename === 'User' || result.__typename === 'Organization'"
       class="search-result"
       :class="{
-          'repo-type': result.__typename === 'Repository',
           'user-type': result.__typename === 'User',
           'org-type': result.__typename === 'Organization'
         }"
@@ -13,6 +13,10 @@
         <h1>{{ name }}</h1>
         <p>{{ result.bio }}</p>
       </div>
+    </div>
+    <div v-else-if="result.__typename === 'Repository'" class="search-result repo-type">
+      <h1>{{ result.owner.login }}/{{ result.name }}</h1>
+      <p>{{ result.description }}</p>
     </div>
   </router-link>
 </template>
@@ -33,11 +37,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-result {
-  height: 150px;
+  min-height: 150px;
   display: block;
   background: white;
   border-radius: 10px;
   border: 1px solid #c4c4c4;
+  .user-type,
+  .org-type,
+  .repo-type {
+    display: none;
+  }
 }
 
 .search-result.user-type,
@@ -76,6 +85,26 @@ export default {
       color: #747474;
       font-size: 20px;
     }
+  }
+}
+
+.search-result.repo-type {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  text-align: left;
+  padding: 0 15px;
+  h1 {
+    color: #22181c;
+    font-size: 24;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+  }
+  p {
+    font-weight: lighter;
+    color: #747474;
+    font-size: 20px;
+    margin: 0;
   }
 }
 </style>

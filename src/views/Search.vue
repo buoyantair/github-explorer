@@ -92,7 +92,7 @@ header {
   padding: 50px 0;
   margin: 0 auto;
   display: grid;
-  grid-auto-rows: 150px;
+  grid-auto-rows: minmax(150px, auto);
   height: 100%;
   grid-gap: 15px;
 }

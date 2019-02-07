@@ -2,8 +2,9 @@ query searchUsers ($first: Int, $query: String!, $type: SearchType!) {
   search(first: $first, query: $query, type: $type) {
     nodes {
       ... on Repository {
-        id
+      	id
         name
+        description
         owner {
           login
         }
