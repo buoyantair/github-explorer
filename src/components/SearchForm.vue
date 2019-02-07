@@ -105,34 +105,36 @@ export default {
 }
 
 .search-form--small {
-  width: 600px;
   margin: auto 0;
-  display: flex;
-  flex-flow: row;
-  justify-content: flex-start;
+  font-weight: normal;
+  display: grid;
+  grid-template-columns: auto 0.2fr;
+  grid-template-rows: 60px;
+  grid-gap: 15px;
   .input-group {
-    display: flex;
-    flex-flow: row;
-    justify-content: center;
-    margin: 0 auto;
-  }
-  input {
-    display: block;
-    height: 30px;
-    width: 500px;
-  }
-
-  input,
-  select {
-    margin: 10px;
-  }
-
-  a {
-    margin: 10px;
-    button {
-      margin: auto 20px;
-      height: 50px;
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: 0.8fr 0.2fr;
+    input {
+      grid-column: 1;
     }
+    select {
+      grid-column: 2;
+      margin-left: 15px;
+    }
+  }
+
+  button {
+    grid-column: 2;
+    height: 100%;
+    margin: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .search-form--small {
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px 40px;
   }
 }
 </style>

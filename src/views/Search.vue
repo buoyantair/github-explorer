@@ -65,23 +65,24 @@ export default {
 }
 header {
   background: white;
-  height: 130px;
+  min-height: 130px;
   border-bottom: 1px solid #c4c4c4;
   display: grid;
-  grid-template-columns: auto 0.15fr 0.6fr auto;
+  grid-template-columns: auto 20% 60% auto;
   grid-template-rows: 1fr;
   a {
     grid-column: 2;
-  }
-  .site-heading {
-    text-align: left;
-    margin: auto 0;
-    display: inline;
-    font-size: 36px;
-    span {
-      font-size: 24px !important;
+    .site-heading {
+      text-align: left;
+      margin: auto 0;
+      display: inline;
+      font-size: 36px;
+      span {
+        font-size: 24px !important;
+      }
     }
   }
+
   .search-form--small {
     grid-column: 3;
   }
@@ -95,5 +96,22 @@ header {
   grid-auto-rows: minmax(150px, auto);
   height: 100%;
   grid-gap: 15px;
+}
+
+@media (max-width: 800px) {
+  header {
+    grid-template-columns: auto 80% auto;
+    grid-template-rows: 80px minmax(40px, auto);
+    padding-bottom: 30px;
+    a {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .search-form--small {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
 }
 </style>

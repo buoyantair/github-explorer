@@ -47,6 +47,7 @@ a {
   margin: 0;
   font-size: 36px;
   font-weight: 800;
+  text-align: left;
   span {
     font-size: 24px;
     font-weight: 600;
