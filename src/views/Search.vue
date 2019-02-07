@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="search">
     <header>
       <Header size="small"/>
       <SearchForm type="small"/>
     </header>
-    <p>search page: {{ $route.query.query }}</p>
+    <section class="search-results"></section>
   </div>
 </template>
 <script>
@@ -16,13 +16,18 @@ export default {
   components: {
     Header,
     SearchForm
-  },
-  data() {}
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.search {
+  background: #eeeeee;
+  height: 100vh;
+  width: 100vw;
+}
 header {
+  background: white;
   height: 130px;
   border-bottom: 1px solid #c4c4c4;
   display: grid;
@@ -43,5 +48,12 @@ header {
   .search-form--small {
     grid-column: 3;
   }
+}
+
+.search-results {
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
 }
 </style>
