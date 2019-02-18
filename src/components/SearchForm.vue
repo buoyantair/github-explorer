@@ -39,7 +39,7 @@
         <option value="REPOSITORY">Repositories</option>
       </select>
     </div>
-    <router-link :to="{ path: 'search', query: { query: search.query, type: search.type }}">
+    <router-link :to="{ path: '/search', query: { query: search.query, type: search.type }}">
       <Button>Search</Button>
     </router-link>
   </form>
@@ -59,11 +59,6 @@ export default {
   props: {
     type: String,
     search: Object
-  },
-  methods: {
-    updateSearch() {
-      console.log('tada')
-    }
   }
 }
 </script>
