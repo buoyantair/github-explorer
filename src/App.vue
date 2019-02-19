@@ -34,4 +34,11 @@ a:visited {
   outline: none;
   color: initial;
 }
+
+.card {
+  background: white;
+  padding: 0 15px;
+  border-radius: 10px;
+  border: 1px solid #c4c4c4;
+}
 </style>

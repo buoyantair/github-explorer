@@ -47,9 +47,11 @@ export default {
 <style lang="scss" scoped>
 .layout {
   background: #eeeeee;
-  min-height: 100vh;
   width: 100vw;
 }
+
+
+
 header {
   background: white;
   min-height: 130px;

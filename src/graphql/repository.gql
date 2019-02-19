@@ -1,0 +1,21 @@
+query repoInfo($owner:String!, $name:String!, $qualifiedName:String!) { 
+  repository(owner:$owner, name:$name){
+		description
+    name
+    ref(qualifiedName:$qualifiedName) {
+      name
+      target {
+        ... on Commit {
+          id
+          tree {
+            entries {
+              oid
+              name
+              type
+            }
+          }
+        }
+      }
+    }
+  }
+}

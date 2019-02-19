@@ -28,6 +28,11 @@ export default new Router({
       path: '/:id',
       name: 'user',
       component: () => import(/* webpackChunkName: "user" */ './views/User.vue')
+    },
+    {
+      path: '/:id/:repo',
+      name: 'repo',
+      component: () => import(/* webpackChunkName: "repo" */ './views/Repository.vue')
     }
   ]
 })

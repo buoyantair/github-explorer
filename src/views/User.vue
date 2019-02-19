@@ -8,7 +8,7 @@
               pageInfo = results.data.user.repositories.pageInfo && ''
             }}
             <div class="user">
-              <div class="user-detail">
+              <div class="card user-detail">
                 <h1>{{ $route.params.id }}</h1>
                 <p>{{ results.data.user.bio }}</p>
               </div>
@@ -102,15 +102,11 @@ export default {
   grid-gap: 15px;
   .user-detail {
     grid-column: 2;
-    background: white;
     display: flex;
     flex-flow: column;
     justify-content: center;
     text-align: left;
-    padding: 0 15px;
     height: 150px;
-    border-radius: 10px;
-    border: 1px solid #c4c4c4;
     h1 {
       color: #22181c;
       font-size: 24;
