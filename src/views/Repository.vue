@@ -1,31 +1,26 @@
 <template>
   <Layout>
-      <div v-if="results">
-        <div v-if="results.loading">Loading...</div>
-        <div v-else-if="results.error">An error occured</div>
-        <div v-else-if="results.data && results.data.repository">
-
-          <div class="repo">
-            <div class="card repo-info">
-              <h1>{{ results.data.repository.name }}</h1>
-              <p>{{ results.data.repository.description }}</p>
-            </div>
-            <div class="card repo-detail">
-              <div
-                v-for="entry in results.data.repository.ref.target.tree.entries"
-                :key="entry.oid"
-                class="entry"
-              >
-                {{ entry.name }}
-              </div>
-            </div>
-            <div class="card viewport">
-              This is where shit gets rendered
-            </div>
+    <div v-if="results">
+      <div v-if="results.loading">Loading...</div>
+      <div v-else-if="results.error">An error occured</div>
+      <div v-else-if="results.data && results.data.repository">
+        <div class="repo">
+          <div class="card repo-info">
+            <h1>{{ results.data.repository.name }}</h1>
+            <p>{{ results.data.repository.description }}</p>
           </div>
+          <div class="card repo-detail">
+            <div
+              v-for="entry in results.data.repository.ref.target.tree.entries"
+              :key="entry.oid"
+              class="entry"
+            >{{ entry.name }}</div>
+          </div>
+          <div class="card viewport">{{ currentFile && (currentFile.name || "loading...") }}</div>
         </div>
-        <div v-else>No result :(</div>
       </div>
+      <div v-else>No result :(</div>
+    </div>
   </Layout>
 </template>
 <script>
@@ -42,9 +37,35 @@ export default {
       variables() {
         return this.$data.variables
       },
-      result (results) {
-        this.$data.results =  results
-      },
+      result(results) {
+        this.$data.results = results
+        const rootEntries = results.data.repository.ref.target.tree.entries
+        if (rootEntries) {
+          let readMeFile = rootEntries.find(x => x.name.match(/readme/i))
+          this.$data.currentFile = readMeFile
+          this.$apollo.queries.object.refetch({
+            owner: 'buoyantair',
+            name: 'old-website',
+            oid: readMeFile.oid
+          })
+        }
+      }
+    },
+    object: {
+      query: require('../graphql/object.gql'),
+      result({
+        data: {
+          object: { object }
+        }
+      }) {
+        console.log(object)
+        if (object) {
+          this.$data.currentFile = {
+            ...this.$data.currentFile,
+            ...object
+          }
+        }
+      }
     }
   },
   data() {
@@ -54,38 +75,8 @@ export default {
         name: this.$route.params.repo,
         qualifiedName: 'master'
       },
-      results: {}
-    }
-  },
-  methods: {
-    loadMore() {
-      const { data: { user: { repositories: { pageInfo } } } } = this.$data.results;
-      if (pageInfo.hasNextPage) {
-        this.$apollo.queries.user.fetchMore({
-          variables: {
-            ...this.$data.variables,
-            after: pageInfo.endCursor
-          },
-          updateQuery(previousResult, { fetchMoreResult }) {
-            const newUser = fetchMoreResult.user
-            const repositories = {
-              ...previousResult.user.repositories,
-              nodes: [...previousResult.user.repositories.nodes, ...fetchMoreResult.user.repositories.nodes],
-              pageInfo: {
-                ...fetchMoreResult.user.repositories.pageInfo,
-                startCursor: previousResult.user.repositories.pageInfo.startCursor
-              }
-            }
-            return {
-              user: {
-                __typename: previousResult.user.__typename,
-                ...newUser,
-                repositories
-              }
-            }
-          }
-        })
-      }
+      results: {},
+      currentFile: null
     }
   }
 }
@@ -99,8 +90,6 @@ export default {
   grid-template-columns: 1fr;
   grid-gap: 20px;
 }
-
-
 
 .repo-info {
   display: flex;
@@ -132,13 +121,11 @@ export default {
     transition: all 0.2s;
     &:hover {
       cursor: pointer;
-      background: #EBEBEB;
+      background: #ebebeb;
     }
   }
   .entry:first-of-type {
     border: none;
   }
 }
-
-
 </style>

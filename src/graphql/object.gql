@@ -1,0 +1,17 @@
+query objectDetails($owner: String!, $name: String!, $oid: GitObjectID) {
+  object: repository(owner: $owner, name: $name) {
+    object(oid: $oid) {
+      ... on Tree {
+        entries {
+          name
+          type
+          oid
+        }
+      }
+      ... on Blob {
+        text
+        oid
+      }
+    }
+  }
+}

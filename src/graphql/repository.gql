@@ -1,8 +1,8 @@
-query repoInfo($owner:String!, $name:String!, $qualifiedName:String!) { 
-  repository(owner:$owner, name:$name){
-		description
+query repoInfo($owner: String!, $name: String!, $qualifiedName: String!) {
+  repository: repository(owner: $owner, name: $name) {
+    description
     name
-    ref(qualifiedName:$qualifiedName) {
+    ref(qualifiedName: $qualifiedName) {
       name
       target {
         ... on Commit {
