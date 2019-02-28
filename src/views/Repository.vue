@@ -55,25 +55,22 @@ export default {
     },
     object: {
       query: require('../graphql/object.gql'),
-      result({
-        data: {
-          object: { object }
-        }
-      }) {
-        if (object) {
+      result({ data: { object } }) {
+        if (object.object) {
+          const data = object.object
           let currentFile = this.$data.currentFile
           switch (currentFile.fileType) {
             case 'md':
-              currentFile.renderedHTML = marked(object.text)
+              currentFile.renderedHTML = marked(data.text)
               break
             default:
-              currentFile.renderedHTML = object.text
+              currentFile.renderedHTML = data.text
               break
           }
 
           this.$data.currentFile = {
             ...currentFile,
-            ...object
+            ...data
           }
         }
       }
