@@ -5,16 +5,17 @@
       <div v-else-if="results.error">An error occured</div>
       <div v-else-if="results.data && results.data.repository">
         <div class="repo">
-          <div class="card repo-info">
+          <a class="card repo-info" :href="`#/${$route.params.id}/${$route.params.repo}`">
             <h1>{{ results.data.repository.name }}</h1>
             <p>{{ results.data.repository.description }}</p>
-          </div>
+          </a>
           <div class="card repo-detail">
-            <div
-              v-for="entry in results.data.repository.ref.target.tree.entries"
+            <a
+              v-for="entry in currentEntries"
               :key="entry.oid"
+              :href="`#/${$route.params.id}/${$route.params.repo}/blob/master/${entry.name}`"
               class="entry"
-            >{{ entry.name }}</div>
+            >{{ entry.name }}</a>
           </div>
           <div class="card viewport" v-html="currentFile.renderedHTML"></div>
         </div>
@@ -40,23 +41,13 @@ export default {
       result(results) {
         this.$data.results = results
         const rootEntries = results.data.repository.ref.target.tree.entries
-        if (rootEntries) {
-          let readMeFile = rootEntries.find(x => x.name.match(/readme/i))
-          readMeFile.fileType = readMeFile.name.split('.')[1]
-          this.$data.currentFile = readMeFile
-          this.$apollo.queries.object &&
-            this.$apollo.queries.object.refetch({
-              owner: this.$data.variables.owner,
-              name: this.$data.variables.name,
-              oid: readMeFile.oid
-            })
-        }
+        this.$data.currentEntries = rootEntries
       }
     },
     object: {
       query: require('../graphql/object.gql'),
       result({ data: { object } }) {
-        if (object.object) {
+        if (object && object.object) {
           const data = object.object
           let currentFile = this.$data.currentFile
           switch (currentFile.fileType) {
@@ -84,7 +75,28 @@ export default {
         qualifiedName: 'master'
       },
       results: {},
-      currentFile: null
+      currentFile: null,
+      currentEntries: []
+    }
+  },
+  updated() {
+    const currentPath = this.$route.fullPath.split('/').splice(5)
+    const rootEntries = this.results.data.repository.ref.target.tree.entries
+    const fileNameFromParams = currentPath[currentPath.length - 1]
+    if (rootEntries) {
+      let currentFile = fileNameFromParams
+        ? rootEntries.find(x =>
+            x.name.match(new RegExp(`${fileNameFromParams}`))
+          )
+        : rootEntries.find(x => x.name.match(/read\s?me/i))
+      currentFile.fileType = currentFile.name.split('.')[1]
+      this.currentFile = currentFile
+      this.$apollo.queries.object &&
+        this.$apollo.queries.object.refetch({
+          owner: this.variables.owner,
+          name: this.variables.name,
+          oid: currentFile.oid
+        })
     }
   }
 }
@@ -122,6 +134,7 @@ export default {
   padding: 0;
   overflow: hidden;
   .entry {
+    display: block;
     text-align: left;
     height: 20px;
     border-top: 1px solid #c4c4c4;

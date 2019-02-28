@@ -17,12 +17,14 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () =>
+        import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
       path: '/search',
       name: 'search',
-      component: () => import(/* webpackChunkName: "search" */ './views/Search.vue')
+      component: () =>
+        import(/* webpackChunkName: "search" */ './views/Search.vue')
     },
     {
       path: '/:id',
@@ -32,7 +34,14 @@ export default new Router({
     {
       path: '/:id/:repo',
       name: 'repo',
-      component: () => import(/* webpackChunkName: "repo" */ './views/Repository.vue')
+      component: () =>
+        import(/* webpackChunkName: "repo" */ './views/Repository.vue')
+    },
+    {
+      path: '/:id/:repo/blob/master/*',
+      name: 'repo-browsing',
+      component: () =>
+        import(/* webpackChunkName: "repo-browsing" */ './views/Repository.vue')
     }
   ]
 })
