@@ -16,7 +16,7 @@
               class="entry"
             >{{ entry.name }}</div>
           </div>
-          <div class="card viewport">{{ currentFile && (currentFile.name || "loading...") }}</div>
+          <div class="card viewport" v-html="currentFile.renderedHTML"></div>
         </div>
       </div>
       <div v-else>No result :(</div>
@@ -25,7 +25,7 @@
 </template>
 <script>
 import Layout from '@/components/Layout.vue'
-
+import marked from 'marked'
 export default {
   name: 'Repository',
   components: {
@@ -42,12 +42,14 @@ export default {
         const rootEntries = results.data.repository.ref.target.tree.entries
         if (rootEntries) {
           let readMeFile = rootEntries.find(x => x.name.match(/readme/i))
+          readMeFile.fileType = readMeFile.name.split('.')[1]
           this.$data.currentFile = readMeFile
-          this.$apollo.queries.object.refetch({
-            owner: 'buoyantair',
-            name: 'old-website',
-            oid: readMeFile.oid
-          })
+          this.$apollo.queries.object &&
+            this.$apollo.queries.object.refetch({
+              owner: this.$data.variables.owner,
+              name: this.$data.variables.name,
+              oid: readMeFile.oid
+            })
         }
       }
     },
@@ -58,10 +60,19 @@ export default {
           object: { object }
         }
       }) {
-        console.log(object)
         if (object) {
+          let currentFile = this.$data.currentFile
+          switch (currentFile.fileType) {
+            case 'md':
+              currentFile.renderedHTML = marked(object.text)
+              break
+            default:
+              currentFile.renderedHTML = object.text
+              break
+          }
+
           this.$data.currentFile = {
-            ...this.$data.currentFile,
+            ...currentFile,
             ...object
           }
         }
@@ -127,5 +138,10 @@ export default {
   .entry:first-of-type {
     border: none;
   }
+}
+
+.viewport {
+  padding: 30px;
+  text-align: left;
 }
 </style>
